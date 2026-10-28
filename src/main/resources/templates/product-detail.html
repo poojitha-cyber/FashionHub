@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: html_head(${product.name})}"></head>
+<body>
+
+<!-- Header -->
+<header th:replace="~{fragments/layout :: header}"></header>
+
+<main class="container">
+    <!-- Breadcrumbs -->
+    <nav class="breadcrumbs">
+        <a th:href="@{/}">Store</a>
+        <span>&rsaquo;</span>
+        <a th:href="@{/(category=${product.category})}" th:text="${product.category}">Category</a>
+        <span>&rsaquo;</span>
+        <span th:text="${product.name}" style="color: var(--secondary); font-weight: 600;">Product</span>
+    </nav>
+
+    <!-- Product Details Main Grid -->
+    <div class="detail-grid">
+        <!-- Gallery / Image -->
+        <div class="detail-gallery">
+            <img th:src="${product.imageUrl}" th:alt="${product.name}">
+        </div>
+
+        <!-- Product Information -->
+        <div class="detail-info">
+            <div class="detail-badge-row">
+                <span class="badge-category" th:text="${product.category}">Electronics</span>
+                <span class="badge-in-stock">In Stock &amp; Ready to Ship</span>
+            </div>
+
+            <h1 class="detail-title" th:text="${product.name}">Product Name</h1>
+
+            <div class="detail-rating">
+                <span>★ ★ ★ ★ ★</span>
+                <span style="font-weight: 700; color: var(--secondary);" th:text="${product.rating}">4.8</span>
+                <span class="reviews-count" th:text="'(' + ${product.reviewsCount} + ' customer reviews)'">(142 reviews)</span>
+            </div>
+
+            <div class="detail-price-box">
+                <div class="detail-price" th:text="${product.formattedPrice}">$149.99</div>
+                <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem;">
+                    Taxes calculated at checkout &bull; Free standard shipping over $50
+                </div>
+            </div>
+
+            <p class="detail-description" th:text="${product.description}">
+                Full product description and overview text explaining key benefits and materials.
+            </p>
+
+            <h4 class="features-header">Key Highlights &amp; Specifications:</h4>
+            <ul class="features-list">
+                <li th:each="feature : ${product.features}" th:text="${feature}">Feature Specification Item</li>
+            </ul>
+
+            <!-- Add to Cart Form with Quantity Selector -->
+            <form th:action="@{/cart/add}" method="post" class="ajax-add-to-cart-form">
+                <input type="hidden" name="productId" th:value="${product.id}">
+                <input type="hidden" name="returnUrl" th:value="@{/products/{id}(id=${product.id})}">
+
+                <div class="action-row">
+                    <!-- Quantity Stepper -->
+                    <div class="qty-control">
+                        <button type="button" class="qty-btn qty-minus" aria-label="Decrease quantity">&minus;</button>
+                        <input type="number" name="quantity" class="qty-input" value="1" min="1" max="99" readonly>
+                        <button type="button" class="qty-btn qty-plus" aria-label="Increase quantity">&plus;</button>
+                    </div>
+
+                    <!-- Add to Cart Button -->
+                    <button type="submit" class="btn-primary btn-large">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M11 9h2V6h3V4h-3V1h-2v3H8v2h3v3zm-4 9c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2zm-9.83-3.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.86-7.01L19.42 4h-.01l-1.1 2-2.76 5H8.53l-.13-.27L6.16 6l-.95-2-.94-2H1v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.13 0-.25-.11-.25-.25z"/>
+                        </svg>
+                        <span>Add to Cart</span>
+                    </button>
+                </div>
+            </form>
+
+            <!-- Store Guarantees -->
+            <div class="guarantees-bar">
+                <div class="guarantee-item">
+                    <span>⚡</span>
+                    <span>Same-day Dispatch</span>
+                </div>
+                <div class="guarantee-item">
+                    <span>🛡️</span>
+                    <span>30-Day Hassle-Free Return</span>
+                </div>
+                <div class="guarantee-item">
+                    <span>🔒</span>
+                    <span>Encrypted Checkout</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Related Products Section -->
+    <section style="margin-bottom: 4rem;" th:if="${relatedProducts != null and !relatedProducts.isEmpty()}">
+        <h2 style="font-size: 1.45rem; margin-bottom: 1.5rem; color: var(--secondary);">You May Also Like</h2>
+        
+        <div class="products-grid">
+            <div th:each="related : ${relatedProducts}" class="product-card" th:data-category="${related.category}">
+                <div class="card-img-wrapper">
+                    <span class="badge-category" th:text="${related.category}">Category</span>
+                    <a th:href="@{/products/{id}(id=${related.id})}">
+                        <img th:src="${related.imageUrl}" th:alt="${related.name}" class="product-img" loading="lazy">
+                    </a>
+                </div>
+                <div class="card-body">
+                    <div class="product-rating">
+                        <span>★</span>
+                        <span style="font-weight: 700;" th:text="${related.rating}">4.7</span>
+                    </div>
+                    <h3 class="product-title">
+                        <a th:href="@{/products/{id}(id=${related.id})}" th:text="${related.name}">Related Product</a>
+                    </h3>
+                    <div class="card-footer">
+                        <div class="product-price" th:text="${related.formattedPrice}">$79.99</div>
+                        <a th:href="@{/products/{id}(id=${related.id})}" class="btn-primary" style="padding: 0.45rem 0.95rem; font-size: 0.82rem;">
+                            View
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<!-- Footer -->
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+
+<!-- Scripts -->
+<div th:replace="~{fragments/layout :: scripts}"></div>
+
+</body>
+</html>

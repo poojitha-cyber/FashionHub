@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: devops-ecommerce-deployment
+  labels:
+    app: devops-ecommerce
+    tier: frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: devops-ecommerce
+  template:
+    metadata:
+      labels:
+        app: devops-ecommerce
+        tier: frontend
+    spec:
+      containers:
+        - name: devops-ecommerce
+          image: devopsteam/devops-ecommerce:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+              name: http
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 15
+            timeoutSeconds: 3
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            timeoutSeconds: 3
+            successThreshold: 1

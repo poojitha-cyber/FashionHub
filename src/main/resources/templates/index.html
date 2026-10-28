@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: html_head('Home')}"></head>
+<body>
+
+<!-- Header -->
+<header th:replace="~{fragments/layout :: header}"></header>
+
+<main>
+    <!-- Hero Banner -->
+    <section class="hero-section">
+        <div class="container hero-grid">
+            <div class="hero-content">
+                <div class="hero-tag">
+                    <span>✨ DevOps Ready Demo Store</span>
+                </div>
+                <h1 class="hero-title">
+                    Discover Everyday Essentials with <span>Style &amp; Speed</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Explore curated electronics, premium clothing, all-terrain footwear, and everyday accessories with zero-database session persistence and lightning-fast delivery.
+                </p>
+                <div class="hero-cta-group">
+                    <a href="#catalog" class="btn-primary">
+                        <span>Shop Catalog</span>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </a>
+                    <a th:href="@{/cart}" class="btn-secondary">
+                        <span>View Shopping Cart</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="hero-feature-cards" id="features">
+                <div class="hero-feature-card">
+                    <div class="hero-feature-icon">⚡</div>
+                    <h4>Java 21 &amp; Spring Boot</h4>
+                    <p>Sub-second response times, in-memory catalog, and embedded Tomcat.</p>
+                </div>
+                <div class="hero-feature-card">
+                    <div class="hero-feature-icon">🚚</div>
+                    <h4>Free Shipping &gt; $50</h4>
+                    <p>Automatic discount thresholds calculated live in your cart.</p>
+                </div>
+                <div class="hero-feature-card">
+                    <div class="hero-feature-icon">📦</div>
+                    <h4>Containerized Ready</h4>
+                    <p>Docker multi-stage builds and Kubernetes manifests included.</p>
+                </div>
+                <div class="hero-feature-card">
+                    <div class="hero-feature-icon">🛡️</div>
+                    <h4>Session-Based Cart</h4>
+                    <p>Safe user state persistence with no external database overhead.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Catalog Section -->
+    <section class="container catalog-controls-section" id="catalog">
+        <!-- Flash Alert Messages -->
+        <div th:if="${successMessage}" class="flash-alert flash-alert-success">
+            <span th:text="${successMessage}">Success message</span>
+            <button type="button" onclick="this.parentElement.remove()" style="background:none;border:none;cursor:pointer;font-weight:bold;">&times;</button>
+        </div>
+
+        <div class="section-header">
+            <div>
+                <h2 class="section-title">Our Featured Catalog</h2>
+                <p style="color: var(--text-secondary); font-size: 0.92rem;">Handpicked gear curated for quality and durability.</p>
+            </div>
+
+            <!-- Category Filter Pills -->
+            <div class="category-pills">
+                <a th:href="@{/}" 
+                   class="category-pill" 
+                   th:classappend="${selectedCategory == 'all' or selectedCategory == null} ? 'active' : ''"
+                   data-category="all">
+                    All Products
+                </a>
+                <a th:each="cat : ${categories}" 
+                   th:href="@{/(category=${cat})}"
+                   class="category-pill" 
+                   th:classappend="${selectedCategory == cat} ? 'active' : ''"
+                   th:data-category="${cat}"
+                   th:text="${cat}">
+                    Category
+                </a>
+            </div>
+        </div>
+
+        <!-- Filter & Search Toolbar -->
+        <div class="filter-bar">
+            <div class="live-filter-wrapper">
+                <span class="live-filter-icon">🔍</span>
+                <input type="text" 
+                       id="liveSearchInput" 
+                       class="live-filter-input" 
+                       placeholder="Filter by name, keyword, or specs..."
+                       th:value="${searchQuery != null ? searchQuery : ''}">
+            </div>
+
+            <div class="catalog-counter" id="productCountDisplay" 
+                 th:text="'Showing ' + ${products.size()} + ' products'">
+                Showing 12 products
+            </div>
+        </div>
+
+        <!-- Products Grid -->
+        <div class="products-grid" id="productsGrid">
+            <div th:each="product : ${products}" 
+                 class="product-card"
+                 th:data-category="${product.category}"
+                 th:data-title="${product.name}"
+                 th:data-desc="${product.description}">
+                
+                <div class="card-img-wrapper">
+                    <span class="badge-category" th:text="${product.category}">Electronics</span>
+                    <a th:href="@{/products/{id}(id=${product.id})}">
+                        <img th:src="${product.imageUrl}" 
+                             th:alt="${product.name}" 
+                             class="product-img"
+                             loading="lazy">
+                    </a>
+                </div>
+
+                <div class="card-body">
+                    <div class="product-rating">
+                        <span>★</span>
+                        <span style="font-weight: 700;" th:text="${product.rating}">4.8</span>
+                        <span class="reviews-count" th:text="'(' + ${product.reviewsCount} + ' reviews)'">(142)</span>
+                    </div>
+
+                    <h3 class="product-title">
+                        <a th:href="@{/products/{id}(id=${product.id})}" th:text="${product.name}">Product Name</a>
+                    </h3>
+
+                    <p class="product-desc" th:text="${product.description}">Short product description text.</p>
+
+                    <div class="card-footer">
+                        <div class="product-price" th:text="${product.formattedPrice}">$149.99</div>
+
+                        <!-- AJAX Add to Cart Form -->
+                        <form th:action="@{/cart/add}" method="post" class="ajax-add-to-cart-form">
+                            <input type="hidden" name="productId" th:value="${product.id}">
+                            <input type="hidden" name="quantity" value="1">
+                            <input type="hidden" name="returnUrl" th:value="@{/(category=${selectedCategory})}">
+                            <button type="submit" class="btn-add-cart">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M11 9h2V6h3V4h-3V1h-2v3H8v2h3v3zm-4 9c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2zm-9.83-3.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.86-7.01L19.42 4h-.01l-1.1 2-2.76 5H8.53l-.13-.27L6.16 6l-.95-2-.94-2H1v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.13 0-.25-.11-.25-.25z"/>
+                                </svg>
+                                <span>Add to Cart</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Empty Search Results State -->
+            <div id="noResultsState" class="empty-catalog-state" style="display: none;">
+                <div class="empty-icon">🔍</div>
+                <h3>No Matching Products Found</h3>
+                <p style="color: var(--text-secondary); margin-top: 0.5rem;">
+                    Try checking your spelling or clearing filters to browse our full catalog.
+                </p>
+                <button type="button" 
+                        class="btn-primary" 
+                        style="margin-top: 1.25rem;"
+                        onclick="document.getElementById('liveSearchInput').value=''; filterProducts();">
+                    Reset Filter
+                </button>
+            </div>
+        </div>
+    </section>
+</main>
+
+<!-- Footer -->
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+
+<!-- Scripts -->
+<div th:replace="~{fragments/layout :: scripts}"></div>
+
+</body>
+</html>

@@ -1,4 +1,4 @@
-# 🛒 DevOps E-Commerce Web Application
+# 🛒 E-Commerce Web Application
 
 [![Java](https://img.shields.io/badge/Java-21%20LTS-orange.svg)](https://www.oracle.com/java/)
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.3.5-brightgreen.svg)](https://spring.io/projects/spring-boot)

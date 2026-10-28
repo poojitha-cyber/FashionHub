@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Modern DevOps E-Commerce Stylesheet
+   Modern FashionHub E-Commerce Stylesheet
    Pure CSS3 with custom properties, responsive grid, and smooth transitions
    ========================================================================== */
 
@@ -1321,13 +1321,13 @@ img {
     margin-bottom: 1.25rem;
 }
 
-.devops-badge-list {
+.brand-badge-list {
     display: flex;
     flex-wrap: wrap;
     gap: 0.4rem;
 }
 
-.devops-pill {
+.brand-pill {
     background-color: rgba(255, 255, 255, 0.08);
     color: #cbd5e1;
     font-size: 0.72rem;

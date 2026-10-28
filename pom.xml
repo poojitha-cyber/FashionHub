@@ -15,8 +15,8 @@
     <groupId>com.example</groupId>
     <artifactId>devops-ecommerce</artifactId>
     <version>1.0.0</version>
-    <name>DevOps E-Commerce Application</name>
-    <description>Modern Spring Boot &amp; Thymeleaf E-Commerce Web App for DevOps Showcase</description>
+    <name>FashionHub E-Commerce Application</name>
+    <description>Modern Spring Boot &amp; Thymeleaf E-Commerce Web App - FashionHub</description>
 
     <properties>
         <java.version>21</java.version>

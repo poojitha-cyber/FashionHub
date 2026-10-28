@@ -1,5 +1,5 @@
 /**
- * Modern DevOps E-Commerce Client Scripts
+ * Modern FashionHub E-Commerce Client Scripts
  * Vanilla JavaScript for live search, category filtering, quantity steppers,
  * asynchronous cart interactions, and non-intrusive toast notifications.
  */
@@ -326,7 +326,7 @@ function initImageFallbacks() {
         img.addEventListener('error', () => {
             const alt = encodeURIComponent(img.alt || 'Product');
             // Clean fallback SVG with modern gradient and product label
-            img.src = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="600" height="450" viewBox="0 0 600 450"><defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="%231e293b"/><stop offset="100%" stop-color="%23334155"/></linearGradient></defs><rect width="600" height="450" fill="url(%23g)"/><text x="50%" y="48%" dominant-baseline="middle" text-anchor="middle" fill="%2394a3b8" font-family="system-ui,sans-serif" font-size="20" font-weight="600">${alt}</text><text x="50%" y="58%" dominant-baseline="middle" text-anchor="middle" fill="%2364748b" font-family="system-ui,sans-serif" font-size="14">DevOps Demo Store</text></svg>`;
+            img.src = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="600" height="450" viewBox="0 0 600 450"><defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="%231e293b"/><stop offset="100%" stop-color="%23334155"/></linearGradient></defs><rect width="600" height="450" fill="url(%23g)"/><text x="50%" y="48%" dominant-baseline="middle" text-anchor="middle" fill="%2394a3b8" font-family="system-ui,sans-serif" font-size="20" font-weight="600">${alt}</text><text x="50%" y="58%" dominant-baseline="middle" text-anchor="middle" fill="%2364748b" font-family="system-ui,sans-serif" font-size="14">FashionHub</text></svg>`;
         });
     });
 }
